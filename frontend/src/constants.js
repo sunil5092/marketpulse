@@ -1,0 +1,1 @@
+export const WATCHLIST_DEFAULT = ['AAPL','GOOGL','MSFT','AMZN','NVDA','TSLA','META','NFLX'];
