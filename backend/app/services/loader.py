@@ -3,7 +3,8 @@ loader.py — ETL LOAD step.
 
 Takes transformed records from transformer.py and:
   - Inserts new rows into PostgreSQL
-  - Skips duplicates gracefully (upsert strategy)
+  - Skips duplicates gracefully (insert-or-skip via unique constraints;
+    existing rows are NOT updated — this is not a full ON CONFLICT upsert)
   - Returns counts of inserted vs skipped rows
 
 This is the final step of the ETL pipeline.
