@@ -54,7 +54,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="MarketPulse API",
     description=(
-        "Real-time stock & financial news data pipeline.\n\n"
+        "Scheduled stock & financial news data pipeline (30-minute ETL).\n\n"
         "Fetches from Yahoo Finance + NewsAPI, transforms, and stores in PostgreSQL.\n"
         "Pipeline runs automatically every 30 minutes via APScheduler."
     ),
