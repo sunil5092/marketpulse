@@ -70,7 +70,7 @@ def fetch_stock_prices(tickers: List[str], days: int = 30) -> Dict[str, pd.DataF
 def fetch_single_stock_info(ticker: str) -> Dict[str, Any]:
     """
     Fetch live quote info for a single ticker (current price, market cap, etc.)
-    Used for the real-time dashboard summary cards.
+    Used for the dashboard summary cards (latest stored quote info).
     """
     try:
         stock = yf.Ticker(ticker)
