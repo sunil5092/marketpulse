@@ -1,6 +1,6 @@
-# 📈 MarketPulse — Real-Time Stock & News Data Pipeline
+# 📈 MarketPulse — Scheduled Stock & News Data Pipeline (ETL)
 
-> End-to-end data engineering project: automated ETL pipeline that fetches live stock prices and financial news, transforms and loads into PostgreSQL, and serves a React dashboard.
+> End-to-end data engineering project: an automated ETL pipeline that runs every 30 minutes, fetching stock prices and financial news, transforming and loading them into PostgreSQL, and serving a React dashboard. It is a scheduled batch pipeline, not a streaming/real-time system.
 
 [![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688?style=flat-square&logo=fastapi)](https://fastapi.tiangolo.com)
@@ -38,7 +38,7 @@ MarketPulse is a production-style data pipeline that runs continuously:
 │                                                  │
 │  EXTRACT   fetcher.py   → raw DataFrames/dicts  │
 │  TRANSFORM transformer.py → clean, enrich        │
-│  LOAD      loader.py    → PostgreSQL upsert      │
+│  LOAD      loader.py    → PostgreSQL insert-or-skip      │
 │                                                  │
 │  Triggered by: APScheduler (every 30 min)        │
 │             or: POST /api/pipeline/run           │
@@ -88,7 +88,7 @@ marketpulse/
 │   │   ├── services/
 │   │   │   ├── fetcher.py           # EXTRACT: Yahoo Finance + NewsAPI
 │   │   │   ├── transformer.py       # TRANSFORM: clean, enrich, classify
-│   │   │   ├── loader.py            # LOAD: PostgreSQL upsert
+│   │   │   ├── loader.py            # LOAD: PostgreSQL insert-or-skip
 │   │   │   └── pipeline.py          # Orchestrator: wires ETL together
 │   │   └── scheduler/
 │   │       └── jobs.py              # APScheduler background job
@@ -230,7 +230,7 @@ pipeline_runs (id, run_type, status, tickers_fetched, rows_inserted, rows_skippe
 |---|---|
 | **ETL pipeline design** | `services/fetcher.py` → `transformer.py` → `loader.py` |
 | **Data cleaning** | Null handling, deduplication, type conversion, derived metrics in `transformer.py` |
-| **SQL / ORM** | SQLAlchemy models, queries, upsert strategy in `models/orm.py` + `loader.py` |
+| **SQL / ORM** | SQLAlchemy models, queries, insert-or-skip load strategy (unique constraints, not ON CONFLICT upserts) in `models/orm.py` + `loader.py` |
 | **Scheduling** | APScheduler background jobs in `scheduler/jobs.py` |
 | **REST API design** | FastAPI with Pydantic validation, dependency injection |
 | **Data modeling** | 3 normalized tables with indexes and constraints |
